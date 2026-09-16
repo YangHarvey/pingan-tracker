@@ -1,0 +1,48 @@
+{
+  "_comment": "中国平安反转指标跟踪 - 云端版配置。人工维护项集中在 manual 段，其余为判定阈值。",
+
+  "stock": {
+    "code": "601318",
+    "name": "中国平安",
+    "secid": "1.601318"
+  },
+  "peers": [
+    { "secid": "1.601318", "code": "601318", "name": "中国平安" },
+    { "secid": "1.601601", "code": "601601", "name": "中国太保" },
+    { "secid": "1.601628", "code": "601628", "name": "中国人寿" },
+    { "secid": "1.601336", "code": "601336", "name": "新华保险" },
+    { "secid": "1.601319", "code": "601319", "name": "中国人保" }
+  ],
+  "benchmark": { "secid": "1.000300", "code": "000300", "name": "沪深300" },
+
+  "thresholds": {
+    "yield_10y": { "deteriorate": 1.60, "watch": 1.75, "prelim": 1.85, "confirm": 2.00 },
+    "pev":       { "watch": 0.65, "prelim": 0.70, "confirm": 0.85 }
+  },
+
+  "manual": {
+    "_note": "以下为季报/半年报口径或需人工核实的项，云端无法自动获取，请按最新披露更新；更新后改 asof 字段。",
+    "ev_total_yi": 15666.0,
+    "ev_asof": "2026-06-30",
+    "ev_note": "集团内含价值（亿元）。由 2026-09-15 时点市值 9713 亿 / P/EV 0.62 反推，请按中报实际披露值替换。",
+    "preset_rate_research": 1.94,
+    "preset_rate_asof": "2026Q2",
+    "preset_rate_cap": 2.0,
+    "preset_rate_note": "中保协普通型人身险预定利率研究值（%）。季度发布，未更新时沿用旧值并在报告中标注。"
+  },
+
+  "baseline": {
+    "_note": "首期无历史时的环比基准（2026-09-15 收盘口径）。",
+    "date": "2026-09-15",
+    "close": 53.90,
+    "ytd": -17.92,
+    "yield_10y": 1.6888,
+    "pev": 0.62,
+    "main_net_flow_5d_yi": -10.55
+  },
+
+  "push": {
+    "_note": "webhook 从环境变量 WECOM_WEBHOOK_URL 读取，不要写进本文件。",
+    "page_base_url": ""
+  }
+}
