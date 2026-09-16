@@ -3,8 +3,10 @@
 跑在 GitHub Actions 上的定时跟踪任务。电脑关机也能执行，报告推送到企业微信群机器人。
 
 - **触发时间**：每周一、三、五 北京时间 08:30（GitHub Actions 可能延迟 5–20 分钟）
-- **推送内容**：Markdown 摘要（关键指标 + 触发判定 + 建议），报告 HTML 作为 Actions 产物留存
-- **运行开销**：纯标准库，无第三方依赖，单次约 10 秒
+- **推送内容**：Markdown 摘要（关键指标 + 触发判定 + 建议 + 在线报告链接）
+- **在线报告**：<https://yangharvey.github.io/pingan-tracker/>
+- **运行开销**：纯标准库，无第三方依赖，单次约 20 秒
+- **当前部署**：`YangHarvey/pingan-tracker`（Public — 免费账户的私有仓库无 Pages）
 
 ---
 
@@ -43,17 +45,17 @@
 
 本地仓库已 `git init` 并做了首次提交，只要加远端即可。
 
-- 有 `gh` CLI：`gh repo create pingan-tracker --private --source=. --push`
-- 没有的话：在 GitHub 网页上**新建一个空仓库（务必选 Private）**，然后：
-
 ```bash
 cd pingan-tracker-cloud
-git remote add origin git@github.com:<你的用户名>/pingan-tracker.git
+git remote add origin https://github.com/<你的用户名>/pingan-tracker.git
 git push -u origin main
 ```
 
-> **仓库建议设为 Private。** webhook 只存在 Secret 里、代码里没有明文，但报告和历史数据没必要公开。
-> 唯一代价见下面「可选：在线报告」——私有仓库的 GitHub Pages 需要付费版。
+> **可见性怎么选：** 免费账户下，想开 Pages（群消息带图表链接）就必须是 **Public**；
+> 想私有就得放弃 Pages（或升级付费）。报告内容只有公开行情数据，Public 的实际风险很低。
+>
+> **注意 SSH：** 本机公钥若未注册到 GitHub，`git@github.com:...` 会报 `Permission denied (publickey)`。
+> 改用 HTTPS，macOS 钥匙串里已存有凭据时无需手动输密码。
 
 ### 2. 配置 Secret
 
@@ -88,18 +90,27 @@ python3 tracker.py --test-push
 - 群里应该收到一条 Markdown 消息
 - Actions 页面出现 `pingan-report-*` 产物，可下载 HTML 报告
 
-### 4. 可选：在线报告（让群消息带可点击的报告链接）
+### 4. 在线报告（让群消息带可点击的报告链接）
 
-群机器人的硬限制是**不能发文件附件**，所以群里收到的是 Markdown 摘要。
-摘要本身已包含全部关键数据，但如果你想在手机上点开看带图表的完整 HTML，需要开启 Pages：
+群机器人的硬限制是**不能发文件附件**，所以完整 HTML 走 Pages 发布，群消息末尾带链接：
 
-1. 仓库 **Settings** → **Pages** → Source 选 **Deploy from a branch** → 分支选 `gh-pages`、目录 `/ (root)` → Save
-2. 首次由 workflow 自动创建 `gh-pages` 分支后才有这个选项，所以**先手动 Run workflow 一次**再回来配
-3. 配好后，每期群消息末尾会出现 `[完整报告](https://<用户名>.github.io/<仓库名>/<日期>.html)`
+```
+[完整报告](https://<用户名>.github.io/<仓库名>/<日期>.html)
+```
+
+配置步骤（**顺序不能反**）：
+
+1. 先手动 **Run workflow** 一次 —— workflow 会自动创建并推送 `gh-pages` 分支
+2. 仓库 **Settings** → **Pages** → Source 选 **Deploy from a branch** → 分支 `gh-pages`、目录 `/ (root)` → Save
+3. 首次构建约 1–3 分钟，之后每期自动更新
 
 > ⚠️ **私有仓库的 GitHub Pages 属于付费功能**（Pro / Team 及以上）。
 > 免费账户要么把仓库设为 Public，要么不开——不开的话该步骤会自动跳过，不影响推送。
-> 报告内容只是公开行情数据，公开风险很低，但决定权在你。
+
+> **踩过的坑：** `git checkout --orphan gh-pages` 之后如果用 `git rm -rf .` 清工作区，
+> 会连 `reports/` 一起删掉，导致 `cp reports/*.html .` 无源文件 → commit 空 → push 静默失败
+> （因为该步骤开了 `continue-on-error`，CI 上仍显示绿色）。
+> 正确做法是 `git rm -r --cached .`：只清索引、保留文件。
 
 ### 5. 关于定时精度
 
@@ -169,6 +180,10 @@ python3 tracker.py
 
 所有请求带节流（间隔 ≥0.9s）和指数退避重试，避免被限流。
 任一项取不到会在报告里明确标注，**不会用旧值冒充**。
+
+> **已知行为：** 资金流接口在 GitHub Actions（海外 IP）基本必失败，报告里会显示「未取到」。
+> 这是数据源的地域限制，不是脚本 bug。国内服务器部署则正常。
+> 脚本对次要指标失败**不会**返回非 0，避免整个 job 失败导致 Pages 步骤被跳过。
 
 ---
 
