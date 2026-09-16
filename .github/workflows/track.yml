@@ -56,10 +56,17 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout --orphan gh-pages
-          git rm -rf . >/dev/null 2>&1 || true
+          # 只清索引、保留工作区文件 —— 用 `git rm -rf .` 会连 reports/ 一起删掉，
+          # 导致下一步 cp 无源文件、commit 空、push 静默失败（本步骤开了容错不易察觉）
+          git rm -r --cached . >/dev/null 2>&1 || true
           # 发布全部历史报告（供群消息里的日期链接直达），并把最新一期作为首页
           cp reports/*.html .
           cp reports/latest.html index.html
+          if [ ! -s index.html ]; then
+            echo "::error::index.html 为空或不存在，终止发布"
+            exit 1
+          fi
           git add "*.html"
           git commit -m "docs: 更新在线报告 $(date +'%Y-%m-%d')"
           git push -f origin gh-pages
+          echo "已发布文件：$(ls *.html | tr '\n' ' ')"
