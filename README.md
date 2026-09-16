@@ -11,12 +11,23 @@
 ## 一、先拿到企微群机器人 webhook（30 秒）
 
 1. 在企业微信里**建一个群**。建议：拉一位同事进群建好后，再把对方移出——群会保留，机器人也还在。
-2. 群聊右上角 **⋯** → **群机器人** → **添加机器人**
+2. 群聊右上角 **⋯** → **消息推送**（旧版叫「群机器人」）→ 添加 → 新建
 3. 名字随便起，比如「平安跟踪」，头像随意 → 创建
 4. 复制 **Webhook 地址**，形如：
    ```
    https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
    ```
+
+> **最容易踩的两个坑：**
+>
+> **① 认错入口。** 「智能机器人」和「消息推送」是**两个并列菜单**，只有后者有 webhook。
+> 智能机器人是用来在群里 @ 它对话的（带大模型），程序推不了消息。
+> 如果你在机器人详情页只看到名称/头像/简介、**找不到「Webhook 地址」一行**，说明建错类型了，退回第 2 步换入口。
+>
+> **② 复制错链接。** Webhook 的域名一定是 `qyapi.weixin.qq.com`，路径含 `/cgi-bin/webhook/send`。
+> 如果复制到的形如 `work.weixin.qq.com/wework_admin/.../openBotProfile/...`，那是**管理后台的资料页**，需登录才能打开，程序用不了。
+>
+> 另：Webhook 只有**创建者本人**可见，所以只能用自己的机器人，这是设计如此，不影响使用。
 
 > ⚠️ 这个地址等同于「往群里发消息」的权限，**不要提交到公开仓库、不要发给别人**。
 > 本项目只从环境变量读取它，不会写进任何文件。
@@ -30,14 +41,19 @@
 
 ### 1. 建仓库并推送
 
+本地仓库已 `git init` 并做了首次提交，只要加远端即可。
+
+- 有 `gh` CLI：`gh repo create pingan-tracker --private --source=. --push`
+- 没有的话：在 GitHub 网页上**新建一个空仓库（务必选 Private）**，然后：
+
 ```bash
 cd pingan-tracker-cloud
-git init
-gh repo create pingan-tracker --private --source=. --push
-# 或者手动在 GitHub 建仓库后：
-# git remote add origin git@github.com:<你的用户名>/pingan-tracker.git
-# git push -u origin main
+git remote add origin git@github.com:<你的用户名>/pingan-tracker.git
+git push -u origin main
 ```
+
+> **仓库建议设为 Private。** webhook 只存在 Secret 里、代码里没有明文，但报告和历史数据没必要公开。
+> 唯一代价见下面「可选：在线报告」——私有仓库的 GitHub Pages 需要付费版。
 
 ### 2. 配置 Secret
 
@@ -72,7 +88,20 @@ python3 tracker.py --test-push
 - 群里应该收到一条 Markdown 消息
 - Actions 页面出现 `pingan-report-*` 产物，可下载 HTML 报告
 
-### 4. 关于定时精度
+### 4. 可选：在线报告（让群消息带可点击的报告链接）
+
+群机器人的硬限制是**不能发文件附件**，所以群里收到的是 Markdown 摘要。
+摘要本身已包含全部关键数据，但如果你想在手机上点开看带图表的完整 HTML，需要开启 Pages：
+
+1. 仓库 **Settings** → **Pages** → Source 选 **Deploy from a branch** → 分支选 `gh-pages`、目录 `/ (root)` → Save
+2. 首次由 workflow 自动创建 `gh-pages` 分支后才有这个选项，所以**先手动 Run workflow 一次**再回来配
+3. 配好后，每期群消息末尾会出现 `[完整报告](https://<用户名>.github.io/<仓库名>/<日期>.html)`
+
+> ⚠️ **私有仓库的 GitHub Pages 属于付费功能**（Pro / Team 及以上）。
+> 免费账户要么把仓库设为 Public，要么不开——不开的话该步骤会自动跳过，不影响推送。
+> 报告内容只是公开行情数据，公开风险很低，但决定权在你。
+
+### 5. 关于定时精度
 
 `cron: '30 0 * * 1,3,5'` 是 **UTC 00:30 = 北京时间 08:30**。
 

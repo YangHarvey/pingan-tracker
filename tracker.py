@@ -766,9 +766,10 @@ def main():
     data_date = (skl[-1][0] if skl else None) or \
                 (y.get("date") if y.get("date") != "—" else now_cn().strftime("%Y-%m-%d"))
 
-    page_url = ""
-    if cfg.get("push", {}).get("page_base_url"):
-        page_url = cfg["push"]["page_base_url"].rstrip("/") + f"/{data_date.replace('-','')}.html"
+    # 在线报告链接：优先读环境变量（CI 里自动拼 Pages 地址），其次读 config.json
+    page_base = os.environ.get("REPORT_PAGE_BASE", "").strip() or \
+        cfg.get("push", {}).get("page_base_url", "").strip()
+    page_url = page_base.rstrip("/") + f"/{data_date.replace('-', '')}.html" if page_base else ""
 
     ctx = {
         "data_date": data_date,
@@ -794,9 +795,12 @@ def main():
     }
 
     md = render_markdown(ctx)
+    html_text = render_html(ctx)
     out_html = outdir / f"{data_date.replace('-', '')}.html"
-    out_html.write_text(render_html(ctx), encoding="utf-8")
+    out_html.write_text(html_text, encoding="utf-8")
     (outdir / "latest.md").write_text(md, encoding="utf-8")
+    # 供 GitHub Pages 发布：永远指向最新一期
+    (outdir / "latest.html").write_text(html_text, encoding="utf-8")
 
     pushed = (False, "dry-run")
     if not args.dry_run:
@@ -811,7 +815,8 @@ def main():
         })
 
     print(f"[OK] 报告：{out_html}")
-    print(f"[OK] 档位：{level}｜10Y {y['latest']}｜收盘 {sq.get('close')}｜P/EV {pev}")
+    print(f"[OK] 档位：{level}｜10Y {y['latest']}｜收盘 {sq.get('close')}"
+          f"｜P/EV {'%.3f' % pev if pev else '未取到'}")
     print(f"[推送] {pushed[1]}")
     for e in errors:
         print(f"[WARN] {e}", file=sys.stderr)
