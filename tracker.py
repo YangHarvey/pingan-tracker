@@ -299,7 +299,9 @@ def fetch_fundflow(secid, lmt=12):
            f"?lmt={lmt}&klt=101&secid={secid}"
            "&fields1=f1,f2,f3,f7&fields2=f51,f52,f57"
            "&ut=b2884a393a59ad64002292a3e90d46a5")
-    js = http_json(url, referer="https://quote.eastmoney.com/")
+    # 次要指标：失败即标「未取到」。海外 IP（如 GitHub Actions）常被东财拒绝，
+    # 重试次数压到 2 次、超时 10s，避免无谓拖慢整个任务（曾导致单跑 50s+）。
+    js = http_json(url, retries=2, timeout=10, referer="https://quote.eastmoney.com/")
     out = []
     for line in ((js.get("data") or {}).get("klines") or []):
         p = line.split(",")
@@ -820,7 +822,19 @@ def main():
     print(f"[推送] {pushed[1]}")
     for e in errors:
         print(f"[WARN] {e}", file=sys.stderr)
-    return 0 if not errors else 1
+
+    # 退出码语义：只有「关键数据缺失」或「配了 webhook 却推送失败」才算任务失败。
+    # 资金流等次要指标在部分网络环境（如 Actions 海外 IP）取不到属正常降级，
+    # 若因此返回非 0，会让 CI 后续步骤（Pages 发布）被整体跳过。
+    critical_missing = (y.get("latest") is None) or (sq.get("close") is None)
+    push_failed = (not args.dry_run) and os.environ.get("WECOM_WEBHOOK_URL") and not pushed[0]
+    if critical_missing:
+        print("[ERROR] 关键数据缺失（10Y 国债或行情），任务失败", file=sys.stderr)
+        return 1
+    if push_failed:
+        print("[ERROR] 已配置 webhook 但推送失败，任务失败", file=sys.stderr)
+        return 1
+    return 0
 
 
 if __name__ == "__main__":
