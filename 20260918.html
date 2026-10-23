@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>中国平安反转指标跟踪 · 2026-09-18</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<style>
+:root{--up:#c62828;--down:#2e7d32;--flat:#666;--bg:#f7f8fa;--card:#fff;--line:#e6e8eb;--txt:#1f2329;--sub:#646a73;--accent:#1a6fd4}
+*{box-sizing:border-box}
+body{margin:0;padding:16px;background:var(--bg);color:var(--txt);font:15px/1.7 -apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",Arial,sans-serif}
+.wrap{max-width:900px;margin:0 auto}
+h1{font-size:20px;margin:0 0 4px}
+h2{font-size:16px;margin:24px 0 10px;padding-left:9px;border-left:3px solid var(--accent)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px}
+.badge{display:inline-block;padding:3px 12px;border-radius:999px;font-size:13px;font-weight:600;color:#fff;background:#646a73}
+.meta{color:var(--sub);font-size:13px;margin-top:6px}
+.concl{font-size:15px;margin:12px 0 0}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:9px 6px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--sub);font-weight:500;font-size:13px}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+.up{color:var(--up)} .down{color:var(--down)} .flat{color:var(--flat)}
+.hit{color:var(--up);font-weight:600} .miss{color:var(--sub)}
+.chart{width:100%;height:280px}
+ul{margin:8px 0;padding-left:20px} li{margin:4px 0}
+.disc{color:var(--sub);font-size:12px;line-height:1.6}
+</style></head><body><div class="wrap">
+
+<div class="card">
+  <h1>中国平安 601318 · 反转指标跟踪</h1>
+  <div><span class="badge">信号档位：未到</span></div>
+  <div class="meta">数据日期 2026-09-18（上一交易日收盘）｜生成于 2026-09-18 12:54</div>
+  <p class="concl">核心条件未触发，维持观望；下行靠 5% 股息率与低估值托底。</p>
+</div>
+
+<div class="card">
+  <h2>核心指标</h2>
+  <table>
+    <tr><th>指标</th><th class="num">本期</th><th class="num">上期</th><th class="num">变动</th></tr>
+    <tr><td>10Y 国债收益率<div class="meta">2026-09-17</div></td><td class="num">1.6862%</td><td class="num">1.6865%</td><td class="num down">-0.0bp</td></tr>
+    <tr><td>P/EV</td><td class="num">0.62×</td><td class="num">0.62×</td><td class="num">-0.00</td></tr>
+    <tr><td>收盘价</td><td class="num">53.41 元</td><td class="num">53.51</td><td class="num up">+0.11%</td></tr>
+    <tr><td>YTD</td><td class="num down">-18.67%</td><td class="num">-18.52%</td><td class="num">-0.15%</td></tr>
+    <tr><td>PE(TTM) / PB</td><td class="num">6.07 / 0.96</td><td class="num">—</td><td class="num">—</td></tr>
+    <tr><td>主力净流（当日 / 5日）</td><td class="num">+0.60 亿 / -6.49 亿</td><td class="num">—</td><td class="num">—</td></tr>
+    <tr><td>预定利率研究值</td><td class="num">1.94%（2026Q2）</td><td class="num">—</td><td class="num">—</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h2>长端利率信号标尺</h2>
+  <div id="gauge" class="chart"></div>
+</div>
+
+<div class="card">
+  <h2>平安 vs 沪深300 超额收益</h2>
+  <div id="excess" class="chart"></div>
+</div>
+
+<div class="card">
+  <h2>触发条件清单</h2>
+  <table><tr><th>条件</th><th class="num">当前值</th><th>状态</th></tr><tr><td>10Y 国债 ≥ 1.75%（观察线）</td><td class='num'>1.6862%</td><td class='miss'>未触发</td></tr><tr><td>P/EV ≥ 0.65（观察线）</td><td class='num'>0.62×</td><td class='miss'>未触发</td></tr><tr><td>保险板块连续 5 日跑赢沪深300</td><td class='num'>否</td><td class='miss'>未触发</td></tr><tr><td>10Y 连续两周 ≥ 1.85% 且 P/EV ≥ 0.70</td><td class='num'>否</td><td class='miss'>未触发</td></tr><tr><td>10Y 突破 2.00% 或 P/EV ≥ 0.85（确认线）</td><td class='num'>1.6862%</td><td class='miss'>未触发</td></tr></table>
+</div>
+
+<div class="card">
+  <h2>本期边际变化</h2>
+  <ul><li>10Y 国债周变动 +0.6bp、日变动 +0.0bp，长端企稳</li><li>较上期（2026-09-16）10Y 变动 -0.0bp</li><li>股价较上期 -0.10 元</li><li>近5日超额 -2.52pct（平安 -2.59% vs 沪深300 -0.07%）</li><li>近20日超额 +4.41pct（平安 +1.99% vs 沪深300 -2.42%）</li><li>YTD超额 -16.01pct（平安 -18.67% vs 沪深300 -2.65%）</li><li>主力资金近 5 日 -6.49 亿，买盘未回流</li></ul>
+</div>
+
+<div class="card">
+  <h2>保险板块同业</h2>
+  <table><tr><th>名称</th><th class="num">现价</th><th class="num">日涨跌</th><th class="num">YTD</th><th class="num">PE</th><th class="num">PB</th></tr><tr><td>中国平安</td><td class='num'>53.41</td><td class='num up'>+0.11%</td><td class='num down'>-18.67%</td><td class='num'>6.07</td><td class='num'>0.96</td></tr><tr><td>中国太保</td><td class='num'>32.25</td><td class='num up'>+1.16%</td><td class='num down'>-20.88%</td><td class='num'>5.50</td><td class='num'>0.97</td></tr><tr><td>中国人寿</td><td class='num'>37.82</td><td class='num up'>+1.80%</td><td class='num down'>-15.73%</td><td class='num'>4.32</td><td class='num'>1.61</td></tr><tr><td>新华保险</td><td class='num'>58.16</td><td class='num up'>+1.27%</td><td class='num down'>-14.02%</td><td class='num'>4.10</td><td class='num'>1.47</td></tr><tr><td>中国人保</td><td class='num'>7.85</td><td class='num up'>+2.08%</td><td class='num down'>-10.90%</td><td class='num'>6.11</td><td class='num'>1.02</td></tr></table>
+  <div class="meta">YTD 由日 K 线自算（前复权），与行情软件口径可能略有差异。</div>
+</div>
+
+<div class="card">
+  <h2>下一步观察要点</h2>
+  <ul>
+    <li>10Y 国债能否连续两周站稳 1.85%（右侧信号）</li>
+    <li>主力资金流何时由负转正</li>
+    <li>中保协 Q3 预定利率研究值（10 月公布）是否延续回升</li>
+    <li>52 周区间 46.25 / 71.59，下方关注 MA60 支撑</li>
+  </ul>
+</div>
+
+<p class="disc">
+数据来源：东方财富公开接口（10Y 国债源出中国债券信息网）；P/EV = 总市值 / 内含价值，
+内含价值取 2026-06-30 披露值 15666 亿元（人工维护，请按最新财报核对）。
+本内容基于公开数据分析，仅供参考，不构成投资建议。市场有风险，投资需谨慎。
+</p>
+
+<script>
+var gauge = echarts.init(document.getElementById('gauge'));
+gauge.setOption({
+  grid:{left:40,right:30,top:30,bottom:40},
+  xAxis:{type:'category',data:['1.60 恶化','1.75 观察','1.85 初步','2.00 确认'],axisLabel:{color:'#646a73',fontSize:11}},
+  yAxis:{type:'value',min:1.55,max:2.15,axisLabel:{formatter:'{value}%',color:'#646a73',fontSize:11},splitLine:{lineStyle:{color:'#eef0f2'}}},
+  series:[
+    {type:'bar',barWidth:22,silent:true,data:[1.55,1.75,1.85,2.00],
+      itemStyle:{color:function(p){return ['#2e7d32','#f0a020','#f0a020','#c62828'][p.dataIndex]}},
+      markLine:{symbol:'none',data:[{yAxis:1.6862}],lineStyle:{color:'#1a6fd4',width:2,type:'solid'},
+        label:{formatter:'当前 1.6862%',position:'insideEndTop',color:'#1a6fd4',fontSize:11}}},
+    {type:'line',data:[1.6862,1.6862,1.6862,1.6862],lineStyle:{color:'#1a6fd4',width:2},symbol:'none'}
+  ]
+});
+var ex = echarts.init(document.getElementById('excess'));
+ex.setOption({
+  tooltip:{trigger:'axis',valueFormatter:function(v){return v==null?'—':v.toFixed(2)+'%'}},
+  legend:{data:['中国平安','沪深300','超额'],textStyle:{color:'#646a73',fontSize:11},top:0},
+  grid:{left:45,right:20,top:36,bottom:28},
+  xAxis:{type:'category',data:["\u8fd15\u65e5", "\u8fd110\u65e5", "\u8fd120\u65e5", "\u8fd160\u65e5", "\u5e74\u521d\u81f3\u4eca"],axisLabel:{color:'#646a73',fontSize:11}},
+  yAxis:{type:'value',axisLabel:{formatter:'{value}%',color:'#646a73',fontSize:11},splitLine:{lineStyle:{color:'#eef0f2'}}},
+  series:[
+    {name:'中国平安',type:'bar',data:[-2.5898230895495145, -6.7237163814180985, 1.9858697727706653, 15.481081081081083, -18.669103091213646],itemStyle:{color:'#5b8ff9'}},
+    {name:'沪深300',type:'bar',data:[-0.06962058995688691, -0.9021448752762118, -2.422221741107178, -7.419549650590973, -2.6548940159051515],itemStyle:{color:'#c9cdd4'}},
+    {name:'超额',type:'line',data:[-2.5202024995926275, -5.821571506141886, 4.408091513877843, 22.900630731672056, -16.014209075308493],lineStyle:{color:'#c62828',width:2},itemStyle:{color:'#c62828'}}
+  ]
+});
+window.addEventListener('resize',function(){gauge.resize();ex.resize()});
+</script>
+</div></body></html>
